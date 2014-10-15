@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset='utf-8'>
+    <title>Trees Rebellion</title>
+</head>
+<body>
+    <canvas width="800" height="600" id="canvas" tabindex='1'>Обновите браузер</canvas>
+
+    <script>
+        var playerPosition = { x: 0, y: 0 };
+        var enemies = [{ x: 50, y: 50, angle: Math.PI * 0.2 }, { x: 250, y: 250, angle: Math.PI * 0.2 }];
+        var canvas = document.getElementById("canvas"),
+            ctx = canvas.getContext('2d');
+
+        drawPlayer(5, 5);
+
+        var moveTimerId;
+
+        canvas.addEventListener("keydown", function (e) {
+            switch (e.keyCode) {
+                case 37:
+                    moveTimerId = setTimeout(move, 5, "LEFT");
+                    break;
+                case 38:
+                    moveTimerId = setTimeout(move, 5, "UP");
+                    break;
+                case 39:
+                    moveTimerId = setTimeout(move, 5, "RIGHT");
+                    break;
+                case 40:
+                    moveTimerId = setTimeout(move, 5, "DOWN");
+                    break;
+            }
+            
+        }, false);
+
+        canvas.addEventListener("keyup", function (e) {
+            clearTimeout(moveTimerId);
+        }, false);
+
+        function move(direction) {            
+            switch (direction) {
+                case "UP":
+                    playerPosition.y--;
+                    break;
+                case "DOWN":
+                    playerPosition.y++;
+                    break;
+                case "LEFT":
+                    playerPosition.x--
+                    break;
+                case "RIGHT":
+                    playerPosition.x++;
+                    break;
+            }
+            render();
+        }
+
+        function drawPlayer(x, y) {
+            ctx.beginPath();
+            ctx.arc(x, y, 10, 0, 2 * Math.PI, false);
+            ctx.fillStyle = 'green';
+            ctx.fill();
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = 'green';
+            ctx.stroke();
+        }
+
+        function drawEnemy(enemy){
+            ctx.beginPath();
+            ctx.arc(enemy.x, enemy.y, 50, 0, enemy.angle, false);
+            ctx.fillStyle = 'yellow';
+            ctx.fill();
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = 'yellow';
+            ctx.stroke();
+        }
+
+        function render() {
+            ctx.fillStyle = "white";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            drawPlayer(playerPosition.x, playerPosition.y);
+            for (var i = 0; i < enemies.length; i++) 
+                drawEnemy(enemies[i]);           
+        }
+    </script>
+</body>
+</html>
