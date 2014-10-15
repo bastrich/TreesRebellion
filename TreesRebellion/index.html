@@ -8,10 +8,13 @@
     <canvas width="800" height="600" id="canvas" tabindex='1'>Обновите браузер</canvas>
 
     <script>
+        
         var playerPosition = { x: 0, y: 0 };
-        var enemies = [{ x: 50, y: 50, angle: Math.PI * 0.2 }, { x: 250, y: 250, angle: Math.PI * 0.2 }];
+        var enemies = [{ x: 50, y: 50, angle: Math.PI * 0.5 }, { x: 250, y: 250, angle: Math.PI * 0.5 }];
         var canvas = document.getElementById("canvas"),
             ctx = canvas.getContext('2d');
+
+        canvas.focus();
 
         drawPlayer(5, 5);
 
@@ -68,12 +71,17 @@
         }
 
         function drawEnemy(enemy){
+            ctx.moveTo(enemy.x, enemy.y);
+            ctx.arc(enemy.x, enemy.y, 70, enemy.angle - 0.25 * Math.PI, enemy.angle + 0.25 * Math.PI);
+            ctx.lineTo(enemy.x, enemy.y);
+            ctx.stroke();
+
             ctx.beginPath();
-            ctx.arc(enemy.x, enemy.y, 50, 0, enemy.angle, false);
-            ctx.fillStyle = 'yellow';
+            ctx.arc(enemy.x, enemy.x, 10, 0, 2 * Math.PI, false);
+            ctx.fillStyle = 'red';
             ctx.fill();
             ctx.lineWidth = 1;
-            ctx.strokeStyle = 'yellow';
+            ctx.strokeStyle = 'red';
             ctx.stroke();
         }
 
