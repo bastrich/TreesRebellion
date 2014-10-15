@@ -8,41 +8,71 @@
     <canvas width="800" height="600" id="canvas" tabindex='1'>Обновите браузер</canvas>
 
     <script>
-        
+
         var playerPosition = { x: 0, y: 0 };
         var enemies = [{ x: 50, y: 50, angle: Math.PI * 0.5 }, { x: 250, y: 250, angle: Math.PI * 0.5 }];
         var canvas = document.getElementById("canvas"),
             ctx = canvas.getContext('2d');
-
         canvas.focus();
+        render();
+        
 
-        drawPlayer(5, 5);
-
-        var moveTimerId;
+        var upPressed = false,
+            downPressed = false,
+            leftPressed = false,
+            rightPressed = false;
 
         canvas.addEventListener("keydown", function (e) {
             switch (e.keyCode) {
                 case 37:
-                    moveTimerId = setTimeout(move, 5, "LEFT");
+                    leftPressed = true;
                     break;
                 case 38:
-                    moveTimerId = setTimeout(move, 5, "UP");
+                    upPressed = true;
                     break;
                 case 39:
-                    moveTimerId = setTimeout(move, 5, "RIGHT");
+                    rightPressed = true;
                     break;
                 case 40:
-                    moveTimerId = setTimeout(move, 5, "DOWN");
+                    downPressed = true;
                     break;
             }
-            
-        }, false);
+
+        }, true);
 
         canvas.addEventListener("keyup", function (e) {
-            clearTimeout(moveTimerId);
-        }, false);
+            switch (e.keyCode) {
+                case 37:
+                    leftPressed = false;
+                    break;
+                case 38:
+                    upPressed = false;
+                    break;
+                case 39:
+                    rightPressed = false;
+                    break;
+                case 40:
+                    downPressed = false;
+                    break;
+            }
+        }, true);
 
-        function move(direction) {            
+
+        setInterval(process, 5);
+
+        function process() {
+            if (upPressed)
+                move("UP");
+            if (leftPressed)
+                move("LEFT");
+            if (rightPressed)
+                move("RIGHT");
+            if (downPressed)
+                move("DOWN");
+            render();
+        }
+
+        function move(direction) {
             switch (direction) {
                 case "UP":
                     playerPosition.y--;
@@ -57,7 +87,6 @@
                     playerPosition.x++;
                     break;
             }
-            render();
         }
 
         function drawPlayer(x, y) {
@@ -70,7 +99,7 @@
             ctx.stroke();
         }
 
-        function drawEnemy(enemy){
+        function drawEnemy(enemy) {
             ctx.moveTo(enemy.x, enemy.y);
             ctx.arc(enemy.x, enemy.y, 70, enemy.angle - 0.25 * Math.PI, enemy.angle + 0.25 * Math.PI);
             ctx.lineTo(enemy.x, enemy.y);
@@ -89,8 +118,8 @@
             ctx.fillStyle = "white";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             drawPlayer(playerPosition.x, playerPosition.y);
-            for (var i = 0; i < enemies.length; i++) 
-                drawEnemy(enemies[i]);           
+            for (var i = 0; i < enemies.length; i++)
+                drawEnemy(enemies[i]);
         }
     </script>
 </body>
